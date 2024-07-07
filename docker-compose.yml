@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  php:
+    build: ./php
+    container_name: php-container
+    volumes:
+      - ./php/laravel:/var/www/html
+      - ./php/custom.conf:/etc/apache2/sites-available/custom.conf
+
+    ports:
+      - "8084:80"
+    depends_on:
+      - mongo
+      - mysql
+      - redis
+      - lambda
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html/public
+      - RUN_MIGRATIONS="true"
+    command: ["apache2-foreground"]
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=123Tester
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    ports:
+      - "3310:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: master
+      MYSQL_DATABASE: poc_db
+      MYSQL_USER: poc
+      MYSQL_PASSWORD: 123456
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  lambda:
+    build: ./lambda
+    container_name: lambda-container
+    platform: linux/amd64
+    ports:
+      - "9001:8080"  # Certifique-se de que a porta interna do contêiner seja 8080
+    
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+volumes:
+  mongo-data:
+  mysql-data:
