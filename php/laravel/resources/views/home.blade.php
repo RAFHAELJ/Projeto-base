@@ -23,13 +23,30 @@
                         <a href="{{url("/usuarios")}}" class="btn btn-outline-primary btn-lg">
                             <i class="fas fa-users me-2"></i> Lista dos Usuários
                         </a>
+                        <a href="{{url("/projetos")}}" class="btn btn-outline-success btn-lg">
+                            <i class="fas fa-tasks me-2"></i> Lista Projetos
+                        </a>
+                        <a href="{{url("/subtarefas")}}" class="btn btn-outline-success btn-lg">
+                            <i class="fas fa-tasks me-2"></i> Lista Sub Tarefas
+                        </a>
                         <a href="{{url("/tarefas")}}" class="btn btn-outline-success btn-lg">
                             <i class="fas fa-tasks me-2"></i> Lista das Tarefas
                         </a>
                     </div>
                 </div>
             </div>
+            <div id="notifications" class="mt-4"></div> <!-- Nova div para notificações -->
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+<script>
+  window.Echo.channel('tarefas')
+    .listen('TarefaAtrasada', (e) => {
+        console.log(e.message);
+    });
+</script>
+@endpush

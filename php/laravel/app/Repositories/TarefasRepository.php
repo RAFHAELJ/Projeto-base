@@ -19,14 +19,19 @@ class TarefasRepository{
         return view('usuarios.form');
     }
 
-    public function add(Request $request){
+    public function create(Request $request){
+        $data = $request->all();
+        $data['user_id'] = auth()->id();
         $tarefa = new Tarefas;
-        $tarefas = $tarefa->create($request->all());
+        $tarefas = $tarefa->create($data);
         return $tarefas;
     }
-
-    public function edit($id){
+    public function find($id){
         $tarefa= Tarefas::find($id);
+        return $tarefa;
+    }
+    public function edit($id){
+        $tarefa = Tarefas::with('subtarefas')->find($id);
         return $tarefa;
     }
 

@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Redirect;
-use Illuminate\Http\Request;
 use App\Models\Tarefa;
+use App\Models\Projeto;
+use Illuminate\Http\Request;
 use App\Repositories\TarefasRepository;
 
 class TarefasController extends Controller
@@ -19,11 +20,23 @@ class TarefasController extends Controller
     }
 
     public function new(){
-        return view('tarefas.form');
+        
+        $projetos = Projeto::all();
+        return view('tarefas.form',compact('projetos'));
     }
 
-    public function add(Request $request){
-        $tarefa =  $this->repository->add($request);
+    public function show($id)
+    {
+    $tarefa = $this->repository->find($id); 
+       
+    $subtarefas = $tarefa->subtarefas;
+    
+    return view('tarefas.show', compact('tarefa', 'subtarefas'));
+    }
+   
+
+    public function store(Request $request){
+        $tarefa =  $this->repository->create($request);
         return Redirect::to('/tarefas');
     }
 

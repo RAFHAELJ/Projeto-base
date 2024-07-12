@@ -2,9 +2,11 @@
 FROM --platform=linux/amd64 amazon/aws-lambda-python:3.8
 
 # Instala o módulo awslambdaric
-RUN pip install awslambdaric
+RUN pip install awslambdaric sqlalchemy pymysql redis pusher
 
-# Copia o código da função Lambda e o entrypoint personalizado
+RUN yum install -y nano
+
+# Copia o código da função Lambda 
 COPY lambda_function.py ${LAMBDA_TASK_ROOT}
 
 

@@ -1,1 +1,6 @@
 boto3
+sqlalchemy
+awslambdaric 
+sqlalchemy 
+pymysql 
+redis

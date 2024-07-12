@@ -20,6 +20,7 @@ class UsersRepository{
     }
 
     public function add(Request $request){
+       
         $usuario = new Usuario;
         $usuario = $usuario->create($request->all());
         return $usuario;

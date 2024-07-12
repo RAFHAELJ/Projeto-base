@@ -15,6 +15,7 @@ services:
       - mysql
       - redis
       - lambda
+      - pusher
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html/public
       - RUN_MIGRATIONS="true"
@@ -53,8 +54,20 @@ services:
     
   redis:
     image: redis:latest
+    container_name: redis-container
     ports:
       - "6379:6379"
+
+  pusher:
+    image: tfgco/pusher
+    container_name: pusher-container
+    ports:
+      - "6001:6001"
+    environment:
+      - PUSHER_APP_ID=local-app-id
+      - PUSHER_APP_KEY=local-key
+      - PUSHER_APP_SECRET=local-secret
+      - PUSHER_APP_CLUSTER=mt1  # Usado localmente, ajuste se necessário
 
 volumes:
   mongo-data:

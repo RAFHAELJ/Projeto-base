@@ -9,36 +9,42 @@ class Tarefas extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'user_id',
+        'project_id',
+        'sector_id',
         'title',
+        'days',
         'description',
         'is_completed',
         'opened_at',
         'completed_at',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'is_completed' => 'boolean',
         'opened_at' => 'datetime',
         'completed_at' => 'datetime',
     ];
 
-    /**
-     * Get the user that owns the task.
-     */
     public function usuario()
     {
         return $this->belongsTo(Usuario::class);
     }
+
+    public function projeto()
+    {
+        return $this->belongsTo(Projeto::class);
+    }
+
+    public function setor()
+    {
+        return $this->belongsTo(Setor::class);
+    }
+
+    
+    public function subtarefas()
+{
+    return $this->hasMany(SubTarefa::class, 'task_id');
+}
 }
