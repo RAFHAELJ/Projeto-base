@@ -55,12 +55,21 @@ Route::middleware(['auth'])->group(function(){
     Route::post('/subtarefas/store/{tarefa_id}', [App\Http\Controllers\SubTarefasController::class, 'store']);
     Route::post('/subtarefas/{id}/update', [App\Http\Controllers\SubTarefasController::class, 'update']);
     Route::post('/subtarefas/{id}/delete', [App\Http\Controllers\SubTarefasController::class, 'delete']);
+
+    Route::post('/send-message', [App\Http\Controllers\MessageController::class, 'sendMessage']);
     Route::get('/invoke-lambda', [App\Http\Controllers\LambdaServiceController::class, 'invokeLambdaFunction']);
 });
 
-
+Route::get('/chat', function () {
+    return view('chat');
+});
 Route::get('/phpinfo', function () {
     phpinfo();
 });
 
 
+
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

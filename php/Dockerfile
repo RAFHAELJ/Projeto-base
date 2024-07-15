@@ -52,12 +52,13 @@ RUN composer install --no-dev --optimize-autoloader --prefer-dist
 # Instalar Laravel UI e configurar Vue.js
 RUN composer require laravel/ui \
     && php artisan ui vue --auth \
-    && composer require jenssegers/mongodb predis/predis pusher/pusher-php-server beyondcode/laravel-websockets doctrine/dbal
+    && composer require jenssegers/mongodb predis/predis pusher/pusher-php-server:5.0 beyondcode/laravel-websockets:1.14.1 doctrine/dbal 
 
 # Instalar dependências do NPM e compilar assets
 COPY laravel/package.json laravel/package-lock.json /var/www/html/
-RUN npm install --production --legacy-peer-deps
-
+RUN npm install --production --legacy-peer-deps \
+npm install laravel-echo-server \
+npm install --save laravel-echo pusher-js --force
 # Limpar cache do Docker
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 

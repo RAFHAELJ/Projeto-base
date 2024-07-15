@@ -1,0 +1,13 @@
+{
+    "name": "laravel-echo-server",
+    "version": "1.0.0",
+    "description": "Laravel Echo Server",
+    "main": "server.js",
+    "scripts": {
+      "start": "laravel-echo-server start"
+    },
+    "dependencies": {
+      "laravel-echo-server": "^1.6.2"
+    }
+  }
+  

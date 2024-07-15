@@ -19,6 +19,9 @@ php artisan config:clear
 php artisan cache:clear
 php artisan key:generate
 php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="migrations"
+php artisan migrate
+php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="config"
+
 
 #npm run dev
 
