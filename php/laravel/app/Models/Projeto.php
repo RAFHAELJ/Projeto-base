@@ -12,7 +12,7 @@ class Projeto extends Model
     protected $fillable = [
         'name',
         'description',
-        'deadline until',
+        'deadline_until',
         'sector',
     ];
 

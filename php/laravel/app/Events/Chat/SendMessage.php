@@ -21,11 +21,11 @@ class SendMessage implements ShouldBroadcast
      * @return void
      */
     public $message;
-    public $user;
-    public function __construct(string $message,int $user)
+    public $userId;
+    public function __construct(string $message,int $userId)
     {
         $this->message = $message;
-        $this->user = $user;
+        $this->userId = $userId;
     }
 
     /**
@@ -35,7 +35,7 @@ class SendMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('user.' . $this->user);
+        return new PrivateChannel('user.' . $this->userId);
     }
 
     public function broadcastAs()

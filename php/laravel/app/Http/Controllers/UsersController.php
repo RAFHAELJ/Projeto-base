@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use Redirect;
 use Illuminate\Http\Request;
-use App\Models\Usuario;
+use App\Models\User;
 use App\Repositories\UsersRepository;
 
 class UsersController extends Controller
 {
     public function __construct(UsersRepository $repository){
         $this->repository = $repository;
+    }
+    public function indexChat(){
+        
+        $usuarios =  $this->repository->indexChat();
+        
+        return $usuarios;
     }
     public function index(){
         $usuarios =  $this->repository->index();

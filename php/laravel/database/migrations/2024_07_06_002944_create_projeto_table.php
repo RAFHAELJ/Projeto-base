@@ -20,7 +20,7 @@ class CreateProjetoTable extends Migration
             $table->text('description')->nullable();
             $table->timestamp('opened_at')->nullable()->comment('Data de abertura do projeto');
             $table->timestamp('completed_at')->nullable()->comment('Data de conclusão do projeto');
-            $table->timestamp('deadline until')->nullable()->comment('Prazo de conclusão');
+            $table->timestamp('deadline_until')->nullable()->comment('Prazo de conclusão');
             $table->timestamps();
         });
     }

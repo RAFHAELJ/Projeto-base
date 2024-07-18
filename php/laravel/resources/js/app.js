@@ -1,8 +1,6 @@
 
-import Vue from 'vue';
-import ChatComponent from './components/ChatComponent.vue';
 
-Vue.component('chat-component', ChatComponent);
+
 
 
 /**
@@ -15,6 +13,30 @@ require('./bootstrap');
 
 window.Vue = require('vue').default;
 
+// Importe o Axios e outras dependências necessárias
+import axios from 'axios';
+
+
+// Configuração global do Axios
+axios.defaults.baseURL = 'http://php/api'; // Substitua pela URL base da sua API
+
+// Interceptador para adicionar o token de autorização
+axios.interceptors.request.use(
+    function(config) {
+        const token = localStorage.getItem('token'); // Supondo que o token esteja armazenado no localStorage
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    function(error) {
+        return Promise.reject(error);
+    }
+);
+
+// Instância do Vue.js ou outra configuração global, se necessário
+
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -25,7 +47,11 @@ window.Vue = require('vue').default;
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+Vue.component('chat-component', require('./components/ChatComponent.vue').default);
 
+Vue.component('user-list', require('./components/UserList.vue').default);
+Vue.component('chat-messenger', require('./components/ChatMessenger.vue').default);
+Vue.component('ChatApp', require('./components/ChatApp.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -34,5 +60,13 @@ window.Vue = require('vue').default;
 
 const app = new Vue({
     el: '#app',
+    data: {
+        selectedUser: null
+    },
+    methods: {
+        handleUserSelected(user) {
+            this.selectedUser = user;
+        }
+    }
    
 });

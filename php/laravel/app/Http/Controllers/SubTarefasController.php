@@ -26,7 +26,7 @@ class SubTarefasController extends Controller
    
     public function new($tarefa_id){
         $tarefa = Tarefas::findOrFail($tarefa_id);
-        return view('subtarefas.form',compact('tarefa'));
+        return view('subTarefas.form',compact('tarefa'));
     }
 
     public function concluir($id)
@@ -56,12 +56,10 @@ class SubTarefasController extends Controller
     public function update(SubTarefasRequest $request, $id)
     {
         $this->subtarefasRepository->update($id, $request->validated());
-        return redirect()->route('/subtarefas')->with('status', 'Subtarefa atualizada com sucesso!');
-    }
+        return Redirect::to('/subtarefas');    }
 
     public function destroy($id)
     {
         $this->subtarefasRepository->delete($id);
-        return redirect()->route('/subtarefas')->with('status', 'Subtarefa excluída com sucesso!');
-    }
+        return Redirect::to('/subtarefas');    }
 }

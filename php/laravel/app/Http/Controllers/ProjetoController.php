@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\ProjetoRequest;
 use App\Repositories\ProjetoRepository;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ProjetoController extends Controller
 {
@@ -26,7 +27,8 @@ class ProjetoController extends Controller
     {
         
         $this->ProjetoRepository->create($request->validated());
-        return redirect()->route('/projetos')->with('status', 'Projeto criado com sucesso!');
+        return Redirect::to('/projetos');
+        
     }
 
     public function new(){
@@ -43,12 +45,10 @@ class ProjetoController extends Controller
     public function update(ProjetoRequest $request, $id)
     {
         $this->ProjetoRepository->update($id, $request->validated());
-        return redirect()->route('/projetos')->with('status', 'Projeto atualizado com sucesso!');
-    }
+        return Redirect::to('/projetos');    }
 
     public function destroy($id)
     {
         $this->ProjetoRepository->delete($id);
-        return redirect()->route('/projetos')->with('status', 'Projeto excluído com sucesso!');
-    }
+        return Redirect::to('/projetos');    }
 }

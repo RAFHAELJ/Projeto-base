@@ -2,22 +2,17 @@ import os
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, Float, TIMESTAMP
 from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 from datetime import datetime, timedelta
-import redis
+import requests
 
 
-REDIS_HOST = 'redis'
-REDIS_PORT = 6379
+
 # Configurar a conexão com o banco de dados
-DATABASE_URL = "mysql+pymysql://root:master@mysql:3306/poc_db"
+DATABASE_URL = "mysql+pymysql://root:master@localhost:3310/poc_db"
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
 
-
-
-# Configuração do Redis
-redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=0)
 
 # Definir as tabelas
 class Tarefa(Base):
@@ -80,9 +75,20 @@ def verificar_atrasos():
         else:
             print(f"Tarefa {tarefa.id} com usuário {user_id} não atingiu a métrica.")
             mensagem = f"Tarefa {tarefa.title} não atingiu a métrica. Porcentagem de subtarefas concluída e já passou 50% do prazo."
-            redis_key = f'tarefa_atrasada:{tarefa.id}'  # Chave no Redis baseada no ID da tarefa
-            redis_client.set(redis_key, mensagem)
-            print(f"Mensagem publicada no Redis com chave '{redis_key}'.")
+             # Enviar mensagem para a rota Laravel
+            url = 'http://localhost:8084/py/messages'  # Substitua pelo URL correto da sua rota Laravel
+            data = {
+                'user_id_py': int(user_id),
+                'message': mensagem,
+                'destination_id' : int(user_id)
+            }
+
+            response = requests.post(url, data=data)
+            if response.status_code == 200:
+                print(f"Mensagem enviada com sucesso para usuário {user_id}.")
+            else:
+                print(f"Falha ao enviar mensagem para usuário {user_id}. Status code: {response.status_code}")
+
 # Handler para a função Lambda
 def handler(event, context):
     atualizar_percentagem_tarefas_nao_concluidas()
