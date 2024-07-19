@@ -46,7 +46,10 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/tarefas/{id}/edit', [App\Http\Controllers\TarefasController::class, 'edit']);
     Route::post('/tarefas/store', [App\Http\Controllers\TarefasController::class, 'store']);
     Route::put('/tarefas/{id}/update', [App\Http\Controllers\TarefasController::class, 'update']);
-    Route::delete('/tarefas/{id}/delete', [App\Http\Controllers\TarefasController::class, 'destroy']);
+    Route::delete('/tarefas/{id}', [App\Http\Controllers\TarefasController::class, 'destroy'])->name('tarefas.destroy');
+
+    Route::get('/tarefasTpl/template', [App\Http\Controllers\TarefasController::class, 'generateTemplate'])->name('tarefasTpl.template');
+    Route::post('/tarefasTpl/upload', [App\Http\Controllers\TarefasController::class, 'upload'])->name('tarefasTpl.upload');
 
     Route::get('/projetos', [App\Http\Controllers\ProjetoController::class, 'index']);    
     Route::get('/projetos/new', [App\Http\Controllers\ProjetoController::class, 'new']);
@@ -61,8 +64,8 @@ Route::middleware(['auth'])->group(function(){
     Route::get('/subtarefas/{id}/edit', [App\Http\Controllers\SubTarefasController::class, 'edit']);
     Route::post('/subtarefas/{id}/concluir', [App\Http\Controllers\SubTarefasController::class, 'concluir']);
     Route::post('/subtarefas/store/{tarefa_id}', [App\Http\Controllers\SubTarefasController::class, 'store']);
-    Route::put('/subtarefas/{id}/update', [App\Http\Controllers\SubTarefasController::class, 'update']);
-    Route::delete('/subtarefas/{id}/delete', [App\Http\Controllers\SubTarefasController::class, 'destroy']);
+    Route::put('/subtarefas/{id}/update', [App\Http\Controllers\SubTarefasController::class, 'update'])->name('subtarefas.update');
+    Route::delete('/subtarefas/{id}/delete', [App\Http\Controllers\SubTarefasController::class, 'destroy'])->name('subtarefas.destroy');
 
     
     Route::get('/messages/unread-count/{userId}', [App\Http\Controllers\MessageController::class, 'unreadCount']);
@@ -90,6 +93,6 @@ Route::get('/phpinfo', function () {
 
 
 
-Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+

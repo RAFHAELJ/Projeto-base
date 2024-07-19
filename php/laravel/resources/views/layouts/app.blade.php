@@ -9,15 +9,34 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
         /* Estilo adicional pode ser adicionado aqui */
+        .notification-badge {
+            background-color: red;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+        }
     </style>
 </head>
 <body>
@@ -34,9 +53,14 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('chat') }}">{{ __('Chat') }}</a>
+                        <li class="nav-item position-relative">
+                            <a class="nav-link" href="{{ route('chat') }}">
+                                <i class="fab fa-whatsapp"></i>
+                                <span class="chat-text">{{ __('Chat') }}</span>
+                            </a>
                         </li>
+                        <!-- Componente Vue para o chat com notificação -->
+                        <chat-notification></chat-notification>
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -48,7 +72,7 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-                            
+
                             @if (Route::has('register'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Registrar') }}</a>
@@ -82,6 +106,12 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        window.Laravel = {
+            userId: @json(Auth::check() ? Auth::id() : null)
+        };
+    </script>
 
     <script>
         // Adicionando funcionalidade de toggle para o botão do menu

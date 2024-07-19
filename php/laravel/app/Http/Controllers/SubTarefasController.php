@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tarefas;
 use Illuminate\Http\Request;
 use App\Http\Requests\SubTarefasRequest;
+use Illuminate\Support\Facades\Redirect;
 use App\Repositories\SubTarefaRepository;
 
 class SubTarefasController extends Controller
@@ -55,11 +56,13 @@ class SubTarefasController extends Controller
 
     public function update(SubTarefasRequest $request, $id)
     {
-        $this->subtarefasRepository->update($id, $request->validated());
-        return Redirect::to('/subtarefas');    }
+        $subtarefa =$this->subtarefasRepository->update($id, $request->validated());
+        return redirect()->back()->with('subtarefaUpdated', $id);
+    }
 
     public function destroy($id)
     {
         $this->subtarefasRepository->delete($id);
-        return Redirect::to('/subtarefas');    }
+        return redirect()->back()->with('subtarefaDeleted', $id);   
+    }
 }

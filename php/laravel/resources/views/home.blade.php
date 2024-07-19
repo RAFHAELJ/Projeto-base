@@ -3,13 +3,12 @@
 @section('content')
 <div class="container my-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span>{{ __('Controle de Afazeres') }}</span>
+        <div class="col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                    <h4 class="mb-0">{{ __('Controle de Afazeres') }}</h4>
                     <span>{{ Auth::user()->name }}</span>
                 </div>
-
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -18,20 +17,42 @@
                         </div>
                     @endif
 
-                    <h1 class="mb-4 text-center">Seja Bem-vindo!</h1>
-                    <div class="d-grid gap-2">
-                        <a href="{{ url('/usuarios') }}" class="btn btn-outline-primary btn-lg">
-                            <i class="fas fa-users me-2"></i> Lista dos Usuários
-                        </a>
-                        <a href="{{ url('/projetos') }}" class="btn btn-outline-success btn-lg">
-                            <i class="fas fa-tasks me-2"></i> Lista Projetos
-                        </a>
-                        <a href="{{ url('/subtarefas') }}" class="btn btn-outline-success btn-lg">
-                            <i class="fas fa-tasks me-2"></i> Lista Sub Tarefas
-                        </a>
-                        <a href="{{ url('/tarefas') }}" class="btn btn-outline-success btn-lg">
-                            <i class="fas fa-tasks me-2"></i> Lista das Tarefas
-                        </a>
+                    <div class="text-center mb-5">
+                        <h1 class="display-4 mb-3">Seja Bem-vindo!</h1>
+                        <p class="lead">Gerencie seus projetos e tarefas de maneira eficiente e organizada.</p>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <a href="{{ url('/usuarios') }}" class="text-decoration-none">
+                                <div class="card text-center border-0 shadow-sm hover-shadow">
+                                    <div class="card-body py-5">
+                                        <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+                                        <h5 class="card-title">Lista dos Usuários</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url('/projetos') }}" class="text-decoration-none">
+                                <div class="card text-center border-0 shadow-sm hover-shadow">
+                                    <div class="card-body py-5">
+                                        <i class="fas fa-project-diagram fa-3x mb-3 text-success"></i>
+                                        <h5 class="card-title">Lista Projetos</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url('/tarefas') }}" class="text-decoration-none">
+                                <div class="card text-center border-0 shadow-sm hover-shadow">
+                                    <div class="card-body py-5">
+                                        <i class="fas fa-tasks fa-3x mb-3 text-warning"></i>
+                                        <h5 class="card-title">Lista das Tarefas</h5>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -39,71 +60,42 @@
             <div id="notifications" class="mt-4"></div> <!-- Nova div para notificações -->
         </div>
     </div>
-  
 </div>
-
-
 @endsection
 
 @push('styles')
 <style>
-    .chat-container {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        width: 30%;
-        height: 70%;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        display: flex;
-        flex-direction: column;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    .container {
+        padding-top: 50px;
+        padding-bottom: 50px;
     }
 
-    .chat-messages {
-        flex: 1;
-        overflow-y: auto;
-        padding: 10px;
+    .card {
+        border-radius: 10px;
     }
 
-    .chat-input {
-        display: flex;
-        padding: 10px;
-        border-top: 1px solid #ccc;
+    .card-header {
+        border-bottom: none;
     }
 
-    .chat-input textarea {
-        flex: 1;
-        resize: none;
-        padding: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
+    .card-title {
+        font-weight: 600;
     }
 
-    .chat-input button {
-        margin-left: 10px;
-        padding: 10px 15px;
-        background-color: #28a745;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+    .hover-shadow:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        transition: box-shadow 0.3s ease-in-out;
     }
 
-    .chat-input button:hover {
-        background-color: #218838;
+    .display-4 {
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .lead {
+        font-size: 1.25rem;
+        color: #34495e;
     }
 </style>
 @endpush
 
-@push('scripts')
-<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
-<script>
-    // Escute os eventos de mensagem recebida no Laravel Echo
-    
-    window.Echo.channel('user.{{ Auth::user()->id }}')
-        .listen('.SendMessage', (e) => {
-            console.log('Mensagem recebida:', e.message);
-        });
-</script>
-@endpush

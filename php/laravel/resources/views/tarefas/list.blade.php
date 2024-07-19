@@ -7,9 +7,17 @@
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <span>{{ __('Lista de Tarefas') }}</span>
-                    <a href="{{ url('/tarefas/new') }}" class="btn btn-light btn-sm">
-                        <i class="fas fa-plus"></i> Nova Tarefa 
-                    </a>
+                    <div>
+                        <a href="{{ url('/home') }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                        <a href="{{ url('/tarefas/new') }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-plus"></i> Nova Tarefa
+                        </a>
+                        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+                            <i class="fas fa-upload"></i> Upload Tarefas
+                        </button>
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -41,6 +49,15 @@
                                     <div>
                                         <span class="badge bg-{{ $tarefa->is_completed ? 'success' : 'warning' }}">{{ $tarefa->is_completed ? 'Concluída' : 'Pendente' }}</span>
                                     </div>
+                                    <div class="d-inline">
+                                        <form action="{{ route('tarefas.destroy', $tarefa->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
                             </a>
                         @endforeach
@@ -56,4 +73,42 @@
         </div>
     </div>
 </div>
+
+<!-- Upload Modal -->
+<div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload de Tarefas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm" action="{{ url('/tarefasTpl/upload') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="file" class="form-label">Selecione o arquivo</label>
+                        <input type="file" class="form-control" id="file" name="file" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+                <hr>
+                <button id="generateTemplate" class="btn btn-secondary">Gerar Template de Exemplo</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var generateTemplateButton = document.getElementById('generateTemplate');
+    if (generateTemplateButton) {
+        generateTemplateButton.addEventListener('click', function() {
+            alert('Gerar template de importação!');
+            window.location.href = "{{ route('tarefasTpl.template') }}";
+        });
+    } else {
+        console.error('Botão "generateTemplate" não encontrado.');
+    }
+});
+</script>

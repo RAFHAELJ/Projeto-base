@@ -52,6 +52,7 @@ Vue.component('chat-component', require('./components/ChatComponent.vue').defaul
 Vue.component('user-list', require('./components/UserList.vue').default);
 Vue.component('chat-messenger', require('./components/ChatMessenger.vue').default);
 Vue.component('ChatApp', require('./components/ChatApp.vue').default);
+Vue.component('chat-notification', require('./components/ChatNotification.vue').default);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

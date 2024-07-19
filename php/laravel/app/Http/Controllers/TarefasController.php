@@ -27,11 +27,10 @@ class TarefasController extends Controller
 
     public function show($id)
     {
-    $tarefa = $this->repository->find($id); 
-       
-    $subtarefas = $tarefa->subtarefas;
-    
-    return view('tarefas.show', compact('tarefa', 'subtarefas'));
+        $tarefa = $this->repository->find($id);       
+        $subtarefas = $tarefa->subtarefas;
+        
+        return view('tarefas.show', compact('tarefa', 'subtarefas'));
     }
    
 
@@ -50,8 +49,22 @@ class TarefasController extends Controller
         return Redirect::to('/tarefas');
     }
 
-    public function delete($id){
-        $tarefa =  $this->repository->add($id);
+    public function destroy($id){
+        $tarefa =  $this->repository->delete($id);
         return Redirect::to('/tarefas');
+    }
+
+    public function generateTemplate()
+    {
+        $tarefa =  $this->repository->generateTemplate();
+        
+        return $tarefa;
+    }
+
+    public function upload(Request $request)
+    {
+        $tarefas = $this->repository->upload($request);
+
+        return redirect()->back()->with('status', 'Tarefas importadas com sucesso!');
     }
 }

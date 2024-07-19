@@ -4,9 +4,11 @@ services:
   php:
     build: ./php
     container_name: php-container
+    
     volumes:
       - ./php/laravel:/var/www/html
       - ./php/custom.conf:/etc/apache2/sites-available/custom.conf
+      - ./php/start-services.sh:/var/www/html/start-services.sh
 
     ports:
       - "8084:80"
@@ -20,7 +22,9 @@ services:
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html/public
       - RUN_MIGRATIONS="true"
-    command: ["apache2-foreground"]
+
+    entrypoint: ["/bin/bash", "/var/www/html/start-services.sh"]
+    
 
   mongo:
     image: mongo:latest

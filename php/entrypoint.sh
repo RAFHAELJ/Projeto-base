@@ -6,9 +6,9 @@ chown -R www-data:www-data /var/www/html
 chmod -R 777 /var/www/html
 
 # Instalar dependências do Laravel
-if [ ! -d "vendor" ]; then
+
   composer install
-fi
+
 
 # Gerar a chave da aplicação Laravel
 if [ ! -f ".env" ]; then
@@ -21,6 +21,7 @@ php artisan key:generate
 php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="migrations"
 php artisan migrate
 php artisan vendor:publish --provider="BeyondCode\LaravelWebSockets\WebSocketsServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider"
 
 
 #npm run dev

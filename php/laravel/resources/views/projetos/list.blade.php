@@ -4,9 +4,9 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-light">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span>{{ __('Lista de Projetos') }}</span>
+                    <h5 class="mb-0">{{ __('Lista de Projetos') }}</h5>
                     <a href="{{ url('/projetos/new') }}" class="btn btn-light btn-sm">
                         <i class="fas fa-plus"></i> Novo Projeto
                     </a>
@@ -22,7 +22,7 @@
 
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">
-                            <thead class="table-dark">
+                            <thead class="table-light">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nome</th>
@@ -57,6 +57,7 @@
                             </tbody>
                         </table>
                     </div>
+
                     @if($projetos->isEmpty())
                         <div class="alert alert-info text-center mt-4">
                             Nenhum projeto encontrado.
@@ -68,3 +69,32 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+    .card {
+        border-radius: 10px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .table-light th {
+        background-color: #f8f9fa;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .table-responsive {
+        margin-top: 20px;
+    }
+</style>
+@endpush
