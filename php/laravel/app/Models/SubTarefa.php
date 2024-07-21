@@ -7,22 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubTarefa extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $table = 'subtarefas';
+	protected $table = 'subtarefas';
 
-    protected $fillable = [
-        'task_id',
-        'title',
-        'description',
-        'is_completed',
-    ];
+	protected $fillable = [
+		'task_id',
+		'title',
+		'description',
+		'is_completed',
+	];
 
-    /**
-     * Get the task that owns the subtask.
-     */
-    public function tarefa()
-    {
-        return $this->belongsTo(Tarefas::class,'task_id');
-    }
+	/**
+	 * Get the task that owns the subtask.
+	 */
+	public function tarefa()
+	{
+		return $this->belongsTo(Tarefas::class, 'task_id');
+	}
 }

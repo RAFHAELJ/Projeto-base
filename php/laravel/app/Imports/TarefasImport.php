@@ -2,7 +2,6 @@
 
 namespace App\Imports;
 
-
 use auth;
 use App\Models\Tarefas;
 use App\Models\SubTarefa;
@@ -11,46 +10,46 @@ use Maatwebsite\Excel\Concerns\ToCollection;
 
 class TarefasImport implements ToCollection
 {
-    protected $userId;
+	protected $userId;
 
-    public function __construct($userId)
-    {
-        
-        $this->userId = $userId;
-    }
-    public function collection(Collection $rows)
-    {
-        $header = $rows->first(); // O cabeçalho está na primeira linha
-        $rows->shift(); // Remove o cabeçalho do restante dos dados
+	public function __construct($userId)
+	{
+		$this->userId = $userId;
+	}
 
-        $tarefas = [];
+	public function collection(Collection $rows)
+	{
+		$header = $rows->first(); // O cabeçalho está na primeira linha
+		$rows->shift(); // Remove o cabeçalho do restante dos dados
 
-        foreach ($rows as $row) {
-            $row = array_combine($header->toArray(), $row->toArray());
+		$tarefas = [];
 
-            // Verificar se a tarefa já foi criada
-            if (!isset($tarefas[$row['ID do Projeto']])) {
-                $tarefa = Tarefas::create([
-                    'project_id' => $row['ID do Projeto'],
-                    'title' => $row['Título da Tarefa'],
-                    'description' => $row['Descrição da Tarefa'],
-                    'days' => $row['Dias'],
-                    'user_id' => $this->userId,
-                ]);
+		foreach ($rows as $row) {
+			$row = array_combine($header->toArray(), $row->toArray());
 
-                $tarefas[$row['ID do Projeto']] = $tarefa;
-            } else {
-                $tarefa = $tarefas[$row['ID do Projeto']];
-            }
+			// Verificar se a tarefa já foi criada
+			if (!isset($tarefas[$row['ID do Projeto']])) {
+				$tarefa = Tarefas::create([
+					'project_id'  => $row['ID do Projeto'],
+					'title'       => $row['Título da Tarefa'],
+					'description' => $row['Descrição da Tarefa'],
+					'days'        => $row['Dias'],
+					'user_id'     => $this->userId,
+				]);
 
-            // Adicionar subtarefas
-            if (!empty($row['ID da Subtarefa'])) {
-                SubTarefa::create([
-                    'task_id' => $tarefa->id,
-                    'title' => $row['Título da Subtarefa'],
-                    'description' => $row['Descrição da Subtarefa'],
-                ]);
-            }
-        }
-    }
+				$tarefas[$row['ID do Projeto']] = $tarefa;
+			} else {
+				$tarefa = $tarefas[$row['ID do Projeto']];
+			}
+
+			// Adicionar subtarefas
+			if (!empty($row['ID da Subtarefa'])) {
+				SubTarefa::create([
+					'task_id'     => $tarefa->id,
+					'title'       => $row['Título da Subtarefa'],
+					'description' => $row['Descrição da Subtarefa'],
+				]);
+			}
+		}
+	}
 }

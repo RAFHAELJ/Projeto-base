@@ -8,14 +8,14 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class EnviarNotificacaoListener
 {
-    public function __construct()
-    {
-        //
-    }
+	public function __construct()
+	{
+		//
+	}
 
-    public function handle(TarefaAtrasadaEvent $event)
-    {
-        // Enviar notificação via Pusher
-        broadcast(new TarefaAtrasadaEvent($event->userId, $event->message));
-    }
+	public function handle(TarefaAtrasadaEvent $event)
+	{
+		// Enviar notificação via Pusher
+		broadcast(new TarefaAtrasadaEvent($event->userId, $event->message));
+	}
 }

@@ -17,15 +17,15 @@ use App\Http\Controllers\MessageController;
 |
 */
 Route::middleware('auth:api')->group(function () {
-    Route::post('/messages/unread-count/{userId}', [MessageController::class, 'unreadCount']);
-    Route::post('/messages', [MessageController::class, 'store']);
-    Route::get('/messages/{userId}', [MessageController::class, 'index']);
-    Route::post('/send-message', [MessageController::class, 'sendMessage']);
-    Route::get('/invoke-lambda', [LambdaServiceController::class, 'invokeLambdaFunction']);
+	Route::post('/messages/unread-count/{userId}', [MessageController::class, 'unreadCount']);
+	Route::post('/messages', [MessageController::class, 'store']);
+	Route::get('/messages/{userId}', [MessageController::class, 'index']);
+	Route::post('/send-message', [MessageController::class, 'sendMessage']);
+	Route::get('/invoke-lambda', [LambdaServiceController::class, 'invokeLambdaFunction']);
 });
 Route::middleware('auth:api')->get('/current-user', function () {
-    return response()->json(Auth::user());
+	return response()->json(Auth::user());
 });
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+	return $request->user();
 });

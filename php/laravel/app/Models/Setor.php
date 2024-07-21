@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setor extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'description',
-    ];
+	protected $fillable = [
+		'name',
+		'description',
+	];
 
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
+	public function tasks()
+	{
+		return $this->hasMany(Task::class);
+	}
 }

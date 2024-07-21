@@ -7,17 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Projeto extends Model
 {
-    use HasFactory;
+	use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'description',
-        'deadline_until',
-        'sector',
-    ];
+	protected $fillable = [
+		'name',
+		'description',
+		'deadline_until',
+		'sector',
+	];
 
-    public function tasks()
-    {
-        return $this->hasMany(Task::class);
-    }
+	public function tasks()
+	{
+		return $this->hasMany(Task::class);
+	}
 }
