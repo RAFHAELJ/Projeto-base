@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\LambdaService;
 use Illuminate\Http\Request;
+use App\Services\LambdaService;
+use Illuminate\Support\Facades\Log;
+use App\Repositories\InvokeLambdaRepository;
 
 class LambdaServiceController extends Controller
 {
 	protected $lambdaService;
 
-	public function __construct(LambdaService $lambdaService)
+	public function __construct(InvokeLambdaRepository $invokeLambdaRepository)
 	{
-		$this->lambdaService = $lambdaService;
+		$this->invokeLambdaRepository = $invokeLambdaRepository;
 	}
 
-	public function invokeLambdaFunction()
-	{
-		$payload  = [];
-		$response = $this->lambdaService->invoke('function', $payload);
-
-		// Faça algo com a resposta
-		return response()->json($response);
-	}
+	public function invokeLambdaFunction(Request $request)
+    {        
+        $response = $this->invokeLambdaRepository->invokeLambdaFunction($request);
+        
+        return response()->json($response);
+    }
 }

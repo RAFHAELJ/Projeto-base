@@ -56,6 +56,7 @@ RUN composer require laravel/ui \
 COPY laravel/package.json laravel/package-lock.json /var/www/html/
 RUN npm install --production --legacy-peer-deps \
     && npm install laravel-echo-server \
+    && npm install emoji-mart-vue \
     && npm install --save laravel-echo pusher-js --force
 
 # Limpar cache do Docker

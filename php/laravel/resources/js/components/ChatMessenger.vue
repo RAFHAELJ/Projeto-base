@@ -12,8 +12,10 @@
             </div>
         </div>
         <div class="chat-input">
-            <textarea v-model="newMessage" placeholder="Digite sua mensagem"></textarea>
+            <textarea ref="messageInput" v-model="newMessage" placeholder="Digite sua mensagem"></textarea>
             <button @click="sendMessage">Enviar</button>
+            <button @click="toggleEmojiPicker">😊</button>
+            <Picker v-if="showEmojiPicker" @emoji-click="addEmoji" />
         </div>
     </div>
 </template>
@@ -22,13 +24,19 @@
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import moment from 'moment';
+import { Picker } from 'emoji-mart-vue';
+import 'emoji-mart-vue/css/emoji-mart.css';
 
 export default {
     props: ['selectedUser'],
+    components: {
+        Picker
+    },
     data() {
         return {
             messages: [],
             newMessage: '',
+            showEmojiPicker: false,
             echo: null,
             currentUserId: null,
             activeUsers: [],
@@ -65,6 +73,7 @@ export default {
                 destination_id: this.selectedUser.id
             })
             .then(response => {
+                console.log('Mensagem enviada:', response.data); // Verifique o que está sendo enviado
                 this.messages.push(response.data);
                 this.$emit('messageSent', this.selectedUser.id); // Emite o evento de mensagem enviada
                 this.newMessage = '';
@@ -112,9 +121,7 @@ export default {
                 .listen('.SendMessage', (e) => {
                     let messageData = JSON.parse(e.message);
                    
-                    // Verifica se this.activeUsers está definido e não vazio
                     if (this.activeUsers && this.activeUsers.length > 0) {
-                        // Verifica se o remetente da mensagem está ativo
                         let senderIsActive = this.activeUsers.some(user => user.id === messageData.sender_id);
                         
                         if (senderIsActive) {
@@ -125,15 +132,12 @@ export default {
                             });
                             this.$emit('messageReceived', messageData.sender_id); // Emite o evento de mensagem recebida
                         } else {
-                            // Lógica para lidar com o remetente inativo
                             console.log(`Mensagem recebida de usuário inativo: ${messageData.sender_id}`);
                         }
                     } else {
-                        // Lógica para lidar com this.activeUsers não inicializado
                         console.log('Lista de usuários ativos não está definida ou vazia.');
                     }
                 });
-
         },
         messageClass(message) {
             return {                
@@ -144,10 +148,17 @@ export default {
         formatMessageTime(time) {
             return moment(time).format('HH:mm');
         },
-        // Método para verificar se um usuário está ativo no canal de presença
-        isUserActive(userId) {
-            return this.activeUsers.some(user => user.id === userId);
+        toggleEmojiPicker() {
+            this.showEmojiPicker = !this.showEmojiPicker;
         },
+        addEmoji(emoji) {
+            console.log('Emoji selecionado:', emoji.native); // Verifique o emoji selecionado
+            this.newMessage += emoji.native;
+            this.showEmojiPicker = false;
+            this.$nextTick(() => {
+                this.$refs.messageInput.focus();
+            });
+        }
     },
     mounted() {
         axios.get('/current-user')
@@ -181,8 +192,8 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100%;
-    overflow-y: auto; /* Adicione rolagem vertical se necessário */
-    justify-content: flex-end; /* Alinha as mensagens ao final do contêiner */
+    overflow-y: auto;
+    justify-content: flex-end;
 }
 
 .sent-message {
@@ -213,7 +224,7 @@ export default {
 }
 
 .message-time {
-    align-self: flex-end; /* Ajuste para colocar o horário à frente da mensagem enviada */
+    align-self: flex-end;
     font-size: 0.8em;
     color: #999;
 }
@@ -222,6 +233,7 @@ export default {
     display: flex;
     padding: 1rem;
     border-top: 1px solid #ccc;
+    position: relative;
 }
 
 .chat-input textarea {
@@ -244,5 +256,12 @@ export default {
 
 .chat-input button:hover {
     background-color: #0056b3;
+}
+
+.emoji-mart {
+    position: absolute;
+    bottom: 60px;
+    left: 10px;
+    z-index: 10;
 }
 </style>

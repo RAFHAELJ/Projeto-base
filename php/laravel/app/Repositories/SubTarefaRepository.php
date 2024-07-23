@@ -4,9 +4,18 @@ namespace App\Repositories;
 
 use App\Models\Tarefas;
 use App\Models\SubTarefa;
+use App\Repositories\InvokeLambdaRepository;
 
 class SubTarefaRepository
 {
+
+	protected $invokeLambdaRepository;
+
+    public function __construct(InvokeLambdaRepository $invokeLambdaRepository)
+    {
+        $this->invokeLambdaRepository = $invokeLambdaRepository;
+    }
+
 	public function getAll()
 	{
 		return SubTarefa::all();
@@ -19,9 +28,13 @@ class SubTarefaRepository
 
 	public function concluir($id)
 	{
+		
 		$subtarefa               = Subtarefa::findOrFail($id);
 		$subtarefa->is_completed = true;
 		$subtarefa->save();
+
+		$payload = ['message' => 'contabilizar'];
+        $response = $this->invokeLambdaRepository->invokeLambdaFunction($payload);
 
 		// Verificar se todas as subtarefas da tarefa estão concluídas
 		$tarefa                 = $subtarefa->tarefa;

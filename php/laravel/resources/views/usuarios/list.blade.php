@@ -7,9 +7,14 @@
             <div class="card shadow-sm border-light">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">{{ __('Lista de Usuários') }}</h5>
-                    <a href="{{ url('/usuarios/new') }}" class="btn btn-light btn-sm">
-                        <i class="fas fa-user-plus"></i> Novo Usuário
-                    </a>
+                    <div>
+                        <a href="{{ url('/home') }}" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-left"></i> Voltar
+                        </a>
+                        <a href="{{ url('/usuarios/new') }}" class="btn btn-light btn-sm ms-2">
+                            <i class="fas fa-user-plus"></i> Novo Usuário
+                        </a>
+                    </div>
                 </div>
 
                 <div class="card-body">

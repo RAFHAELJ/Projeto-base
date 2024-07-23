@@ -51,6 +51,13 @@
                                 </a>
                             @endif
                         </div>
+
+                        <!-- Mensagem de sucesso opcional -->
+                        @if (session('status'))
+                            <div class="alert alert-success mt-3">
+                                {{ session('status') }}
+                            </div>
+                        @endif
                     </form>
                 </div>
             </div>

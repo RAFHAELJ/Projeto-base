@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\LambdaService;
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\InvokeLambdaRepository;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,9 +15,9 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->app->singleton(LambdaService::class, function ($app) {
-			return new LambdaService();
-		});
+		$this->app->singleton(InvokeLambdaRepository::class, function ($app) {
+            return new InvokeLambdaRepository($app->make(LambdaService::class));
+        });
 	}
 
 	/**

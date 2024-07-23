@@ -53,12 +53,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item position-relative">
-                            <a class="nav-link" href="{{ route('chat') }}">
-                                <i class="fab fa-whatsapp"></i>
-                                <span class="chat-text">{{ __('Chat') }}</span>
-                            </a>
-                        </li>
+                        
                         <!-- Componente Vue para o chat com notificação -->
                         <chat-notification></chat-notification>
                     </ul>

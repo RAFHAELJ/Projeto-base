@@ -1,18 +1,15 @@
-import os
+
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, ForeignKey, Float, TIMESTAMP
 from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 from datetime import datetime, timedelta
 import requests
 
-
-
 # Configurar a conexão com o banco de dados
-DATABASE_URL = "mysql+pymysql://root:master@localhost:3310/poc_db"
+DATABASE_URL = "mysql+pymysql://root:master@mysql:3306/poc_db"
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
 session = Session()
 Base = declarative_base()
-
 
 # Definir as tabelas
 class Tarefa(Base):
@@ -67,20 +64,20 @@ def verificar_atrasos():
 
         # Calcular prazo limite para 50% do tempo
         prazo_limite_50_percent = created_at + timedelta(days=dias_estipulados / 2)
-    
-      
-        # Verificar se esta dentro do cronograma
+
+        # Verificar se está dentro do cronograma
         if (hoje <= prazo_limite_50_percent and percentage >= 70): 
-            print(f"Tarefa {tarefa.id} com usuario {user_id} está dentro da métrica.")
+            print(f"Tarefa {tarefa.id} com usuário {user_id} está dentro da métrica.")
         else:
             print(f"Tarefa {tarefa.id} com usuário {user_id} não atingiu a métrica.")
             mensagem = f"Tarefa {tarefa.title} não atingiu a métrica. Porcentagem de subtarefas concluída e já passou 50% do prazo."
-             # Enviar mensagem para a rota Laravel
-            url = 'http://localhost:8084/py/messages'  # Substitua pelo URL correto da sua rota Laravel
+            
+            # Enviar mensagem para a rota Laravel
+            url = 'http://php/py/messages'  
             data = {
                 'user_id_py': int(user_id),
                 'message': mensagem,
-                'destination_id' : int(user_id)
+                'destination_id': int(user_id)
             }
 
             response = requests.post(url, data=data)
@@ -91,13 +88,21 @@ def verificar_atrasos():
 
 # Handler para a função Lambda
 def handler(event, context):
-    atualizar_percentagem_tarefas_nao_concluidas()
-    verificar_atrasos()
+    
+    message = event.get('message', '')
+    
+    if message == 'gerenciar':
+        verificar_atrasos()
+    else:
+        atualizar_percentagem_tarefas_nao_concluidas()
+    
     return {
         'statusCode': 200,
-        'body': 'Percentagens atualizadas e verificação de atrasos concluída com sucesso!'
+        'body': 'Processo concluído com sucesso!'
     }
 
-# Exemplo de execução da função handler manualmente
+
 if __name__ == "__main__":
-    handler({}, {})
+    
+    event = {'message': 'gerenciar'}
+    handler(event, {})

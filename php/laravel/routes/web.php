@@ -1,8 +1,16 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-use MongoDB\Client as MongoClient;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\TarefasController;
+use App\Http\Controllers\ProjetoController;
+use App\Http\Controllers\SubTarefasController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\LambdaServiceController;
+use App\Http\Controllers\NewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,72 +23,97 @@ use MongoDB\Client as MongoClient;
 |
 */
 
-Route::group(['middleware' => 'web'], function () {
-	Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+// Public Routes
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
-	Auth::routes();
+// Authentication Routes
+Auth::routes();
 
-	Route::get('/oauth/csrf', function () {
-		return [];
-	});
+// Custom Logout Route
+Route::post('/logout', [HomeController::class, 'logout'])->name('logout');
 
-	Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// OAuth CSRF Route
+Route::get('/oauth/csrf', function () {
+    return [];
 });
-Route::middleware('auth:web')->group(function () {
-	Broadcast::routes();
-});
-Route::middleware(['auth'])->group(function () {
+
+// Routes requiring authentication
+Route::middleware('auth')->group(function () {
+    Broadcast::routes();
+
+    // Home Route
+    Route::get('/home', [HomeController::class, 'index'])->name('dashboard');
+
+    // User Routes
+    Route::prefix('usuarios')->group(function () {
+        Route::get('/', [UsersController::class, 'index']);
+        Route::get('/new', [UsersController::class, 'new']);
+        Route::get('/{id}/edit', [UsersController::class, 'edit']);
+        Route::post('/add', [UsersController::class, 'add']);
+        Route::put('/{id}/update', [UsersController::class, 'update']);
+        Route::delete('/{id}/delete', [UsersController::class, 'destroy']);
+    });
 	Route::get('/users', [App\Http\Controllers\UsersController::class, 'indexChat']);
-	Route::get('/usuarios', [App\Http\Controllers\UsersController::class, 'index']);
-	Route::get('/usuarios/new', [App\Http\Controllers\UsersController::class, 'new']);
-	Route::get('/usuarios/{id}/edit', [App\Http\Controllers\UsersController::class, 'edit']);
-	Route::post('/usuarios/add', [App\Http\Controllers\UsersController::class, 'add']);
-	Route::put('/usuarios/{id}/update', [App\Http\Controllers\UsersController::class, 'update']);
-	Route::delete('/usuarios/{id}/delete', [App\Http\Controllers\UsersController::class, 'destroy']);
 
-	Route::get('/tarefas', [App\Http\Controllers\TarefasController::class, 'index']);
-	Route::get('/tarefas/new', [App\Http\Controllers\TarefasController::class, 'new']);
-	Route::get('/tarefas/{id}', [App\Http\Controllers\TarefasController::class, 'show']);
-	Route::get('/tarefas/{id}/edit', [App\Http\Controllers\TarefasController::class, 'edit']);
-	Route::post('/tarefas/store', [App\Http\Controllers\TarefasController::class, 'store']);
-	Route::put('/tarefas/{id}/update', [App\Http\Controllers\TarefasController::class, 'update']);
-	Route::delete('/tarefas/{id}', [App\Http\Controllers\TarefasController::class, 'destroy'])->name('tarefas.destroy');
+    // Task Routes
+    Route::prefix('tarefas')->group(function () {
+        Route::get('/', [TarefasController::class, 'index']);
+        Route::get('/new', [TarefasController::class, 'new']);
+        Route::get('/{id}', [TarefasController::class, 'show']);
+        Route::get('/{id}/edit', [TarefasController::class, 'edit']);
+        Route::post('/store', [TarefasController::class, 'store']);
+        Route::put('/{id}/update', [TarefasController::class, 'update']);
+        Route::delete('/{id}', [TarefasController::class, 'destroy'])->name('tarefas.destroy');
+        Route::get('/Tpl/template', [TarefasController::class, 'generateTemplate'])->name('tarefasTpl.template');
+        Route::post('/Tpl/upload', [TarefasController::class, 'upload'])->name('tarefasTpl.upload');
+    });
 
-	Route::get('/tarefasTpl/template', [App\Http\Controllers\TarefasController::class, 'generateTemplate'])->name('tarefasTpl.template');
-	Route::post('/tarefasTpl/upload', [App\Http\Controllers\TarefasController::class, 'upload'])->name('tarefasTpl.upload');
+    // Project Routes
+    Route::prefix('projetos')->group(function () {
+        Route::get('/', [ProjetoController::class, 'index']);
+        Route::get('/new', [ProjetoController::class, 'new']);
+        Route::get('/{id}', [ProjetoController::class, 'show']);
+        Route::get('/{id}/edit', [ProjetoController::class, 'edit']);
+        Route::post('/store', [ProjetoController::class, 'store']);
+        Route::put('/{id}/update', [ProjetoController::class, 'update']);
+        Route::delete('/{id}/delete', [ProjetoController::class, 'destroy']);
+    });
 
-	Route::get('/projetos', [App\Http\Controllers\ProjetoController::class, 'index']);
-	Route::get('/projetos/new', [App\Http\Controllers\ProjetoController::class, 'new']);
-	Route::get('/projetos/{id}', [App\Http\Controllers\ProjetoController::class, 'show']);
-	Route::get('/projetos/{id}/edit', [App\Http\Controllers\ProjetoController::class, 'edit']);
-	Route::post('/projetos/store', [App\Http\Controllers\ProjetoController::class, 'store']);
-	Route::put('/projetos/{id}/update', [App\Http\Controllers\ProjetoController::class, 'update']);
-	Route::delete('/projetos/{id}/delete', [App\Http\Controllers\ProjetoController::class, 'destroy']);
+    // Subtask Routes
+    Route::prefix('subtarefas')->group(function () {
+        Route::get('/', [SubTarefasController::class, 'index']);
+        Route::get('/new/{tarefa_id}', [SubTarefasController::class, 'new']);
+        Route::get('/{id}/edit', [SubTarefasController::class, 'edit']);
+        Route::post('/{id}/concluir', [SubTarefasController::class, 'concluir']);
+        Route::post('/store/{tarefa_id}', [SubTarefasController::class, 'store']);
+        Route::put('/{id}/update', [SubTarefasController::class, 'update'])->name('subtarefas.update');
+        Route::delete('/{id}/delete', [SubTarefasController::class, 'destroy'])->name('subtarefas.destroy');
+    });
 
-	Route::get('/subtarefas', [App\Http\Controllers\SubTarefasController::class, 'index']);
-	Route::get('/subtarefas/new/{tarefa_id}', [App\Http\Controllers\SubTarefasController::class, 'new']);
-	Route::get('/subtarefas/{id}/edit', [App\Http\Controllers\SubTarefasController::class, 'edit']);
-	Route::post('/subtarefas/{id}/concluir', [App\Http\Controllers\SubTarefasController::class, 'concluir']);
-	Route::post('/subtarefas/store/{tarefa_id}', [App\Http\Controllers\SubTarefasController::class, 'store']);
-	Route::put('/subtarefas/{id}/update', [App\Http\Controllers\SubTarefasController::class, 'update'])->name('subtarefas.update');
-	Route::delete('/subtarefas/{id}/delete', [App\Http\Controllers\SubTarefasController::class, 'destroy'])->name('subtarefas.destroy');
+    // Message Routes
+    Route::prefix('messages')->group(function () {
+        Route::get('/unread-count/{userId}', [MessageController::class, 'unreadCount']);
+        Route::post('/', [MessageController::class, 'store']);
+        Route::get('/{userId}', [MessageController::class, 'index']);
+    });
 
-	Route::get('/messages/unread-count/{userId}', [App\Http\Controllers\MessageController::class, 'unreadCount']);
-	Route::post('/messages', [App\Http\Controllers\MessageController::class, 'store']);
-	Route::get('/messages/{userId}', [App\Http\Controllers\MessageController::class, 'index']);
-	Route::post('/send-message', [App\Http\Controllers\MessageController::class, 'sendMessage']);
-	Route::get('/invoke-lambda', [App\Http\Controllers\LambdaServiceController::class, 'invokeLambdaFunction']);
-	Route::get('/chat', function () {
-		return view('chat');
-	})->name('chat');
-	;
+    // Additional Routes
+    Route::post('/send-message', [MessageController::class, 'sendMessage']);
+    Route::post('/invoke-lambda', [LambdaServiceController::class, 'invokeLambdaFunction']);
+    Route::get('/chat', function () {
+        return view('chat');
+    })->name('chat');
+
+   
 });
+
+// Rotas adicionais fora do grupo autenticado
 Route::get('/current-user', function () {
-	return Auth::user();
+    return Auth::user();
 });
 
-Route::post('/py/messages', [App\Http\Controllers\MessageController::class, 'store']);
+Route::post('/py/messages', [MessageController::class, 'store']);
 
 Route::get('/phpinfo', function () {
-	phpinfo();
+    phpinfo();
 });
