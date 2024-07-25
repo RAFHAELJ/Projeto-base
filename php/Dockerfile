@@ -29,9 +29,6 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 RUN pecl install mongodb redis \
     && docker-php-ext-enable mongodb redis
 
-# Copiar código-fonte para o diretório de trabalho
-COPY ./laravel /var/www/html
-
 # Configurar o Apache
 RUN a2enmod rewrite
 
@@ -43,6 +40,9 @@ RUN a2ensite custom.conf && a2dissite 000-default.conf
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
+
+# Copiar código-fonte para o diretório de trabalho
+COPY ./laravel /var/www/html
 
 # Instalar dependências do Laravel
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
