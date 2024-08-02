@@ -19,15 +19,17 @@ RUN apt-get update && apt-get install -y \
     npm \
     libssl-dev \
     pkg-config \
+    libcurl4-openssl-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Instalar extensões PHP
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install gd pdo_mysql mysqli mbstring exif pcntl bcmath zip
 
-# Instalar as extensões MongoDB e Redis
+# Instalar as extensões MongoDB, Redis e curl
 RUN pecl install mongodb redis \
-    && docker-php-ext-enable mongodb redis
+    && docker-php-ext-enable mongodb redis \
+    && docker-php-ext-install curl
 
 # Configurar o Apache
 RUN a2enmod rewrite
