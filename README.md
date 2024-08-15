@@ -45,7 +45,7 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
 
 5. **Interaja com o código dentro do contêiner PHP**:
     ```bash
-    docker compose exec -it php-container bash
+    docker exec -it php-container bash
     ```
 
 6. **Para finalizar o ambiente Docker**:
