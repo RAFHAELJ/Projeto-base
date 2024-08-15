@@ -50,6 +50,8 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
 
 - **URL de acesso**: [http://localhost:8084/login](http://localhost:8084/login)
 
+  **Nota:** No primeiro acesso, clique em **Registrar** no canto superior direito da tela e adicione um usuário para poder acessar o sistema. Recomenda-se adicionar dois usuários para verificar o chat: o primeiro usuário da lista e o seu próprio.
+
 ## Agendamento de Tarefas
 
 Para acionar o cron e verificar os atrasos automaticamente, use o comando:
