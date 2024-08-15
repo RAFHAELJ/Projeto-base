@@ -34,6 +34,11 @@ RUN pecl install mongodb redis \
 # Configurar o Apache
 RUN a2enmod rewrite
 
+RUN a2enmod ssl && a2enmod rewrite
+RUN mkdir -p /etc/apache2/ssl
+# Copiar certificados SSL para o contêiner
+COPY ./ssl/*.pem /etc/apache2/ssl/
+
 # Adicionar o arquivo de configuração personalizado
 COPY ./custom.conf /etc/apache2/sites-available/custom.conf
 RUN a2ensite custom.conf && a2dissite 000-default.conf
@@ -66,6 +71,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Expor a porta 80 para o Apache
 EXPOSE 80
+EXPOSE 443
 
 # Copiar e configurar o script de entrada
 COPY entrypoint.sh /usr/local/bin/

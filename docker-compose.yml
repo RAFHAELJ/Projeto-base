@@ -11,7 +11,8 @@ services:
       - ./php/start-services.sh:/var/www/html/start-services.sh
 
     ports:
-      - "8084:80"
+      - "8084:80" 
+      - "4443:443"     
       - "6001:6001"  # Expondo a porta 6001 para WebSocket
     depends_on:
       - mongo
@@ -30,7 +31,7 @@ services:
     image: mongo:latest
     container_name: mongo-container
     ports:
-      - "27017:27017"
+      - "27018:27017"
     volumes:
       - mongo-data:/data/db
     environment:
@@ -61,7 +62,7 @@ services:
     image: redis:latest
     container_name: redis-container
     ports:
-      - "6379:6379"
+      - "6378:6379"
   
   
 
