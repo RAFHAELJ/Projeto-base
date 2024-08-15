@@ -14,8 +14,7 @@
         <div class="chat-input">
             <textarea ref="messageInput" v-model="newMessage" placeholder="Digite sua mensagem"></textarea>
             <button @click="sendMessage">Enviar</button>
-            <button @click="toggleEmojiPicker">😊</button>
-            <Picker v-if="showEmojiPicker" @emoji-click="addEmoji" />
+            
         </div>
     </div>
 </template>

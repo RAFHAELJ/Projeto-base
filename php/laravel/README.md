@@ -1,61 +1,58 @@
-# CRUD DE USERS EM PHP LARAVEL 8
+Projeto Base - Controle de Sprint com Chat Integrado
+Este projeto é uma prova de conceito (PoC) que demonstra um sistema de controle de sprint integrado com um chat, permitindo a comunicação entre membros da equipe separados por setores. O projeto também inclui o controle automático da porcentagem de progresso das sprints, realizado por uma função Lambda que verifica se o projeto está dentro do cronograma e notifica em caso de atrasos. A comunicação em tempo real entre desenvolvedores é possível através do chat integrado.
 
-<p align="center">
-  <b>Crud para cadastro e listagem de Usuários.</b>
-</p>
+Obs: Este projeto esta em desenvolvimento qualquer falha pode ser informada para melhoria 
 
-<p align="center">
-  <a href="https://laravel.com/" target="_blank">
-    <img alt="Made in" src="https://img.shields.io/badge/made%20in-Laravel-purple">
-  </a>
-</p>
+Tecnologias Utilizadas
+Laravel: Estrutura principal do projeto.
+MySQL: Banco de dados relacional utilizado para o controle robusto das tabelas de projetos, usuários, tarefas e sprints, facilitando a integração e a futura implantação de relatórios.
+MongoDB: Banco de dados NoSQL utilizado para armazenar o histórico de conversas do chat, aproveitando sua velocidade e capacidade de adicionar novas colunas dinamicamente.
+Redis: Utilizado para emular WebSockets e proporcionar comunicação em tempo real no chat.
+AWS Lambda (emulada): Utilizada para o controle automático de progresso das sprints e notificações de atrasos.
+Docker: Todo o ambiente foi projetado em Docker, incluindo a emulação da Lambda, para facilitar a visualização e demonstrar a robustez da aplicação.
+Instruções de Instalação
+Clone o repositório para sua máquina local:
 
-## Conteúdo
+bash
+Copiar código
+git clone https://github.com/seu-usuario/seu-repositorio.git
+Acesse a pasta do projeto:
 
-- [CRUD EM PHP LARAVEL 8](#crud-em-php-laravel-8)
-  - [Conteúdo](#conteúdo)
-  - [:bookmark: Sobre](#bookmark-sobre)
-  - [:rocket: Tecnologias Utilizadas](#rocket-tecnologias-utilizadas)
-  - [:zap: Como usar](#zap-como-usar)
-  - [:recycle: Como contribuir](#recycle-como-contribuir)
+bash
+Copiar código
+cd Projeto-base
+Construa as imagens Docker:
 
-<a id="sobre"></a>
+bash
+Copiar código
+docker compose build
+Nota: Este processo pode levar algum tempo.
 
-## :bookmark: Sobre
+Inicie o projeto:
 
-Crud realizado em <strong>Laravel 8</strong> utilizando banco de dados MySql. Realizado para aperfeiçoamento da utilização do Laravel em aplicações.
+bash
+Copiar código
+docker compose up -d
+Interaja com o código dentro do contêiner PHP:
 
-<a id="tecnologias-utilizadas"></a>
+bash
+Copiar código
+docker compose exec -it php-container bash
+Para finalizar o ambiente Docker:
 
-## :rocket: Tecnologias Utilizadas
+bash
+Copiar código
+docker compose down
+Acesso à Aplicação
+URL de acesso: http://localhost:8084/login
+Agendamento de Tarefas
+Para acionar o cron e verificar os atrasos automaticamente, use o comando:
 
-O projeto foi desenvolvido utilizando as seguintes tecnologias
+bash
+Copiar código
+php artisan schedule:run
+Esse comando deve ser agendado para rodar a cada minuto no cron do sistema para garantir que as tarefas programadas sejam executadas corretamente.
 
-- [Laravel 8](https://www.laravel.com/)
-- [MySql](https://mysql.com/)
-- [Bootstrap](https://getbootstrap.com/)
+Arquivo de Configuração
+As senhas e outras variáveis de ambiente estão definidas no arquivo env.example. Renomeie-o para .env e ajuste conforme necessário.
 
-<a id="como-usar"></a>
-
-## :zap: Como usar
-- Faça um clone desse repositório: `git clone https://github.com/Oliveiiraa/CRUD-Users-PHP.git`
-- Configure o .env a partir do .env-example com os dados do seu db
-- Instale a lib Laravel UI pelo composer: `composer -vvv require laravel/ui`
-- Instale o framework VUE em sua lib auth com o : `php artisan ui vue --auth`
-- Instale o NPM: `npm install && npm run dev`
-- Rode as migrations com `php artisan migrate`
-- Inicialize com `php artisan serve`
-- Acesse no seu localhost:8000
-
-<a id="como-contribuir"></a>
-
-## :recycle: Como contribuir
-
-- Faça um Fork desse repositório,
-- Crie uma branch com a sua feature: `git checkout -b my-feature`
-- Commit suas mudanças: `git commit -m 'feat: My new feature'`
-- Push a sua branch: `git push origin my-feature`
-
----
-
-<h4 align=center>Made with 💙 by <a href="https://www.linkedin.com/in/gabriel-h-oliveira/">Gabriel Oliveira</a></h4>
