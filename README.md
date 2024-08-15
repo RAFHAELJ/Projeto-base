@@ -15,6 +15,8 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
 
 ## Instruções de Instalação
 
+**Para efetuar os passos abaixo, é necessário ter um ambiente Docker instalado e funcional em sua máquina.**
+
 1. **Clone o repositório para sua máquina local**:
     ```bash
     git clone https://github.com/RAFHAELJ/Projeto-base.git
@@ -24,7 +26,7 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
     ```bash
     cd Projeto-base
     ```
-                **Para efetuar os passos abaixo e necessario ter um ambiente docker instalado e funcional em sua maquina**  
+
 3. **Construa as imagens Docker**:
     ```bash
     docker compose build
@@ -32,10 +34,14 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
     _Nota: Este processo pode levar algum tempo._
 
 4. **Inicie o projeto**:
-    ```bash
-    docker compose up -d (para execução em segundo plano)
-    docker compose up (para executar em primeito plano parando a mesma com ctrl+c)
-    ```
+    - Para execução em segundo plano:
+      ```bash
+      docker compose up -d
+      ```
+    - Para executar em primeiro plano e parar com `Ctrl+C`:
+      ```bash
+      docker compose up
+      ```
 
 5. **Interaja com o código dentro do contêiner PHP**:
     ```bash
