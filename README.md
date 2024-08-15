@@ -56,6 +56,7 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
 ## Acesso à Aplicação
 
 - **URL de acesso**: [http://localhost:8084/login](http://localhost:8084/login)
+- - **URL de acesso-seguro**: [https://localhost:4443/login](https://localhost:4443/login)
 
   **Nota:** No primeiro acesso, clique em **Registrar** no canto superior direito da tela e adicione um usuário para poder acessar o sistema. Recomenda-se adicionar dois usuários para verificar o chat: o primeiro usuário da lista e o seu próprio.
 
