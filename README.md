@@ -24,7 +24,7 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
     ```bash
     cd Projeto-base
     ```
-
+                **Para efetuar os passos abaixo e necessario ter um ambiente docker instalado e funcional em sua maquina**  
 3. **Construa as imagens Docker**:
     ```bash
     docker compose build
@@ -33,7 +33,8 @@ Este projeto é uma **prova de conceito (PoC)** que demonstra um sistema de cont
 
 4. **Inicie o projeto**:
     ```bash
-    docker compose up -d
+    docker compose up -d (para execução em segundo plano)
+    docker compose up (para executar em primeito plano parando a mesma com ctrl+c)
     ```
 
 5. **Interaja com o código dentro do contêiner PHP**:
