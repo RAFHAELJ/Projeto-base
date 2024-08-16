@@ -53,7 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::put('/{id}/update', [UsersController::class, 'update']);
         Route::delete('/{id}/delete', [UsersController::class, 'destroy']);
     });
-	Route::get('/users', [App\Http\Controllers\UsersController::class, 'indexChat']);
+	Route::get('/users', [UsersController::class, 'indexChat']);
 
     // Task Routes
     Route::prefix('tarefas')->group(function () {

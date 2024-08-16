@@ -35,6 +35,7 @@ class UsersController extends Controller
 
 	public function add(Request $request)
 	{
+		dd('akiiii');
 		$usuario =  $this->repository->add($request);
 		return Redirect::to('/usuarios');
 	}
@@ -47,13 +48,13 @@ class UsersController extends Controller
 
 	public function update($id, Request $request)
 	{
-		$usuario =  $this->repository->add($id, $request);
+		$usuario =  $this->repository->update($id, $request);
 		return Redirect::to('/usuarios');
 	}
 
 	public function delete($id)
 	{
-		$usuario =  $this->repository->add($id);
+		$usuario =  $this->repository->delete($id);
 		return Redirect::to('/usuarios');
 	}
 }
