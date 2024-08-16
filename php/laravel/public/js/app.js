@@ -3620,15 +3620,7 @@ var render = function render() {
     on: {
       click: _vm.sendMessage
     }
-  }, [_vm._v("Enviar")]), _vm._v(" "), _c("button", {
-    on: {
-      click: _vm.toggleEmojiPicker
-    }
-  }, [_vm._v("😊")]), _vm._v(" "), _vm.showEmojiPicker ? _c("Picker", {
-    on: {
-      "emoji-click": _vm.addEmoji
-    }
-  }) : _vm._e()], 1)]);
+  }, [_vm._v("Enviar")])])]);
 };
 var staticRenderFns = [];
 render._withStripped = true;

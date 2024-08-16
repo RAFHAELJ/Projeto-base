@@ -73,12 +73,17 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EXPOSE 80
 EXPOSE 443
 
+ARG user=rafhael
+ARG group=users
+ARG uid=1000
+
+#add
+RUN useradd -G www-data,root -u $uid -d /home/$user $user
+
 # Copiar e configurar o script de entrada
 COPY entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Definir o script de entrada como ponto de entrada
-ENTRYPOINT ["entrypoint.sh"]
 
-# Comando para iniciar o Apache
-CMD ["apache2-foreground"]
+
+

@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
 
+echo "Entrypoint script esta executando" >> /var/log/entrypoint.log
+
 # Configurar permissões do Apache
-echo "Configurando permissões do Apache..."
+echo "Configurando permissões do Apache..." 
 chown -R www-data:www-data /var/www/html
 chmod -R 755 /var/www/html/ /var/www/html/storage /var/www/html/bootstrap/cache
 
@@ -41,6 +43,22 @@ if [ "$RUN_MIGRATIONS" = "true" ]; then
     echo "Executando migrações do banco de dados..."
     php artisan migrate --force
 fi
-
+echo "Entrypoint script esta finalizado " >> /var/log/entrypoint.log
 # Executar o comando original do Dockerfile (apache2-foreground)
+
+# Execute start-services.sh
+apache2-foreground &
+
+sleep 10
+# Iniciar o trabalho de fila
+php artisan queue:work redis &
+
+# Iniciar o WebSocket
+php artisan websockets:serve
+
+php artisan route:clear
+php artisan cache:clear
+php artisan config:cache
+php artisan route:cache
+
 exec "$@"
